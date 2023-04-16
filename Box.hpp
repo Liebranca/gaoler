@@ -10,13 +10,21 @@
   #include "Plane.hpp"
 
 // ---   *   ---   *   ---
+// lame fwd decl
+
+namespace Gaol {
+  class Sphere;
+
+};
+
+// ---   *   ---   *   ---
 // info
 
 namespace Gaol { class Box {
 
 public:
 
-  VERSION   "v2.00.1";
+  VERSION   "v2.00.2";
   AUTHOR    "IBN-3DILA";
 
   // see first note on src
@@ -118,6 +126,20 @@ public:
   // give self+offset
   Box project(glm::vec3& dir);
 
+  // ^a more exotic variation
+  // projects self, extending
+  // planes that face away from view
+  Box project_view(
+    glm::vec3& eye,
+    glm::vec3& pos,
+    glm::vec3& up,
+
+    float      v_zfar,
+    float      v_hfar,
+    float      v_wfar
+
+  );
+
   // give box-box is *possible*
   bool indom_box(Box& other);
 
@@ -126,6 +148,9 @@ public:
 
   // collision hit point inside box
   bool indom_col(Collision& col);
+
+  // defd by Sphere
+  int isect_sphere(Gaol::Sphere& s);
 
   // ray-box intersection
   Collision isect_ray(Line& ray);

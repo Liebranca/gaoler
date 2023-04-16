@@ -66,10 +66,10 @@ void Frustum::calc_box(
   glm::vec3 upfar  = up    * (m_hfar/2);
 
   // far points
-  glm::vec3 ftl    = fc + upfar + hfar;
-  glm::vec3 ftr    = fc + upfar - hfar;
-  glm::vec3 fbl    = fc - upfar + hfar;
-  glm::vec3 fbr    = fc - upfar - hfar;
+  glm::vec3 ftl    = fc + upfar - hfar;
+  glm::vec3 ftr    = fc + upfar + hfar;
+  glm::vec3 fbl    = fc - upfar - hfar;
+  glm::vec3 fbr    = fc - upfar + hfar;
 
   // near offsets
   glm::vec3 nc     = pos + fwd * m_znear;
@@ -77,10 +77,10 @@ void Frustum::calc_box(
   glm::vec3 upnear = up    * (m_hnear/2);
 
   // near points
-  glm::vec3 ntl    = nc + upnear + hnear;
-  glm::vec3 ntr    = nc + upnear - hnear;
-  glm::vec3 nbl    = nc - upnear + hnear;
-  glm::vec3 nbr    = nc - upnear - hnear;
+  glm::vec3 ntl    = nc + upnear - hnear;
+  glm::vec3 ntr    = nc + upnear + hnear;
+  glm::vec3 nbl    = nc - upnear - hnear;
+  glm::vec3 nbr    = nc - upnear + hnear;
 
   // ^make prism from points
   m_box.set_prism(

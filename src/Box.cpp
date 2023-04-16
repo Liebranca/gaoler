@@ -225,6 +225,173 @@ Box Box::project(glm::vec3& dir) {
 };
 
 // ---   *   ---   *   ---
+// ^a more exotic variation
+// projects self, extending
+// planes that face away from view
+
+Box Box::project_view(
+
+  glm::vec3& eye,
+  glm::vec3& pos,
+  glm::vec3& up,
+
+  float      v_zfar,
+  float      v_hfar,
+  float      v_wfar
+
+) {
+
+  Box out;
+
+  // get horizontal axis
+  glm::vec3 haxis=glm::normalize(
+    glm::cross(up,eye)
+
+  );
+
+  glm::vec3 ntl(
+    m_origin.x,
+    m_planes[TOP].p4().y,
+    m_origin.z
+
+  );
+
+  glm::vec3 ntr(
+    m_origin.x,
+    m_planes[TOP].p4().y,
+    m_origin.z
+
+  );
+
+  glm::vec3 castdirn  = {0,0,0};
+  uint8_t   num_dirns = 0;
+
+// ---   *   ---   *   ---
+// walk planes
+// top and bottom skipped
+
+  for(uint8_t i=2;i<6;i++) {
+
+    auto&     plane = m_planes[i];
+    glm::vec3 vto   = pos-plane.centroid();
+
+    float     d     = glm::dot(vto,plane.normal());
+
+    // plane faces away from view
+    if(d > 0) {
+
+      castdirn+=plane.normal();
+      num_dirns++;
+
+      glm::vec3 points[4]={
+
+        plane.edge(0).p1(),
+        plane.edge(0).p2(),
+        plane.edge(1).p2(),
+
+        plane.p4()
+
+      };
+
+      // build reference for
+      // near-plane correction
+      for(auto& p : points) {
+
+        glm::vec3 ref={
+          glm::dot(p,haxis),
+          glm::dot(p,up),
+          glm::dot(p,eye)
+
+        };
+
+        glm::vec3 lolr={
+          glm::dot(ntr,haxis),
+          glm::dot(ntr,up),
+          glm::dot(ntr,eye)
+
+        };
+
+        glm::vec3 loll={
+          glm::dot(ntl,haxis),
+          glm::dot(ntl,up),
+          glm::dot(ntl,eye)
+
+        };
+
+        // ^correct near top from reference
+        if(ref.x < lolr.x) {
+          ntr.x=p.x;
+          ntr.z=p.z;
+
+        };
+
+        if(ref.x > loll.x) {
+          ntl.x=p.x;
+          ntl.z=p.z;
+
+        };
+
+      };
+
+    };
+
+  };
+
+  // adjust direction the resulting
+  // prism will project towards
+  if(num_dirns) {
+    castdirn /= num_dirns;
+
+  };
+
+  // ^get final direction
+  glm::vec3 dirn=normalize(
+    -castdirn + ((m_origin) - pos)
+
+  );
+
+  // ^get offsets
+  glm::vec3 fc    = dirn  * v_zfar;
+  glm::vec3 upfar = up    * (v_hfar/16);
+  glm::vec3 hfar  = haxis * (v_wfar/16);
+
+// ---   *   ---   *   ---
+// calc remaining points
+
+  glm::vec3 nbl(
+    ntl.x,
+    m_planes[BOTTOM].p4().y,
+    ntl.z
+
+  );
+
+  glm::vec3 nbr(
+    ntr.x,
+    m_planes[BOTTOM].p4().y,
+    ntr.z
+
+  );
+
+  // project near plane towards direction
+  glm::vec3 ftl = ntl + fc + upfar - hfar;
+  glm::vec3 ftr = ntr + fc + upfar + hfar;
+  glm::vec3 fbl = nbl + fc - upfar - hfar;
+  glm::vec3 fbr = nbr + fc - upfar + hfar;
+
+  // ^pass points to cstruc
+  // this gives out a prism extending
+  // away from view
+  out.set_prism(
+    nbl,ntl,ftl,fbl,
+    nbr,ntr,ftr,fbr
+
+  );
+
+  return out;
+
+};
+
+// ---   *   ---   *   ---
 // give box-box is *possible*
 
 bool Box::indom_box(Box& other) {

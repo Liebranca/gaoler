@@ -88,6 +88,15 @@ int Sphere::isect_box(Box& box) {
 };
 
 // ---   *   ---   *   ---
+// decld at Box
+
+int Box::isect_sphere(Sphere& s) {
+  auto& b=*this;
+  return s.isect_box(b);
+
+};
+
+// ---   *   ---   *   ---
 
 }; // namespace Gaol
 
