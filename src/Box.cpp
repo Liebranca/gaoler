@@ -61,6 +61,8 @@ void Box::set(
 
 ) {
 
+  m_points.resize(8);
+
   // nbl, ntl, ftl, fbl
   m_points[0]={bot.x-x,bot.y+0,bot.z-z};
   m_points[1]={bot.x-x,bot.y+y,bot.z-z};
@@ -110,6 +112,8 @@ void Box::set_prism(
   glm::vec3 fbr
 
 ) {
+
+  m_points.resize(8);
 
   // ^save points
   m_points[0]=nbl;m_points[1]=ntl;
@@ -161,11 +165,29 @@ void Box::calc_planes(void) {
   auto& b=m_planes[BOTTOM];
   auto& t=m_planes[TOP];
 
-  m_cross[CBOTTOM_L].set(b.edge(1).p2(),b.p4());
-  m_cross[CBOTTOM_R].set(b.p4(),b.edge(0).p1());
+  m_cross[CBOTTOM_L].set(
+    b.edge(1).point(1),
+    b.point(3)
 
-  m_cross[CTOP_L].set(t.edge(1).p2(),t.p4());
-  m_cross[CTOP_R].set(t.p4(),t.edge(0).p1());
+  );
+
+  m_cross[CBOTTOM_R].set(
+    b.point(3),
+    b.edge(0).point(0)
+
+  );
+
+  m_cross[CTOP_L].set(
+    t.edge(1).point(1),
+    t.point(3)
+
+  );
+
+  m_cross[CTOP_R].set(
+    t.point(3),
+    t.edge(0).point(0)
+
+  );
 
 };
 
@@ -251,14 +273,14 @@ Box Box::project_view(
 
   glm::vec3 ntl(
     m_origin.x,
-    m_planes[TOP].p4().y,
+    m_planes[TOP].point(3).y,
     m_origin.z
 
   );
 
   glm::vec3 ntr(
     m_origin.x,
-    m_planes[TOP].p4().y,
+    m_planes[TOP].point(3).y,
     m_origin.z
 
   );
@@ -285,11 +307,11 @@ Box Box::project_view(
 
       glm::vec3 points[4]={
 
-        plane.edge(0).p1(),
-        plane.edge(0).p2(),
-        plane.edge(1).p2(),
+        plane.edge(0).point(0),
+        plane.edge(0).point(1),
+        plane.edge(1).point(1),
 
-        plane.p4()
+        plane.point(3)
 
       };
 
@@ -360,14 +382,14 @@ Box Box::project_view(
 
   glm::vec3 nbl(
     ntl.x,
-    m_planes[BOTTOM].p4().y,
+    m_planes[BOTTOM].point(3).y,
     ntl.z
 
   );
 
   glm::vec3 nbr(
     ntr.x,
-    m_planes[BOTTOM].p4().y,
+    m_planes[BOTTOM].point(3).y,
     ntr.z
 
   );
@@ -492,18 +514,19 @@ bool Box::isect_bottom(
   // get all four corners
   std::vector<glm::vec3> pattern {
 
-    b.edge(0).p1(),
-    b.edge(0).p2(),
-    b.edge(1).p2(),
+    b.edge(0).point(0),
+    b.edge(0).point(1),
+    b.edge(1).point(1),
 
-    b.p4()
+    b.point(3)
 
   };
 
   // ^walk and shoot ray downwards
   for(auto& point : pattern) {
 
-    r.set(point,point-vel);
+    glm::vec3 end=point-vel;
+    r.set(point,end);
 
     if(plane.isect_ray(r).hit()) {
       return true;
@@ -565,15 +588,31 @@ Box::GCHK Box::isect_surface(
 
 bool Box::isect_line(Line& ray) {
 
-  int limit=int(ray.length());
+  int   limit = int(ray.length());
+  float mid   = 0.5f;
 
+  // cap attempts accto len of line
   for(int i=0;i<limit;i++) {
-    glm::vec3 p=ray.point_along(i*0.1f);
 
+    // check mid point inside box
+    glm::vec3 p=ray.point_along(mid);
     if(this->isect_point(p)) {
       return true;
 
     };
+
+    // ^else find next middle point
+    // relative to current position
+    glm::vec3 vto = m_origin-p;
+    float     d   = glm::dot(vto,ray.normal());
+
+    // go backwards along line if
+    // vto points towards normal
+    // else go fowards
+    mid += (d<0)
+      ? -mid/2
+      :  mid/2
+      ;
 
   };
 
@@ -679,6 +718,15 @@ bool Box::isect_cage(Plane& plane) {
   };
 
   return false;
+
+};
+
+// ---   *   ---   *   ---
+// makes CRK
+
+void to_mesh(void) {
+
+  ;
 
 };
 

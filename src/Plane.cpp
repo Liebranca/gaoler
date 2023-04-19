@@ -25,9 +25,9 @@ namespace Gaol {
 // cstruc
 
 void Plane::set(
-  glm::vec3 a,
-  glm::vec3 b,
-  glm::vec3 c
+  glm::vec3& a,
+  glm::vec3& b,
+  glm::vec3& c
 
 ) {
 
@@ -37,15 +37,19 @@ void Plane::set(
 
   );
 
-  m_dir = glm::dot(-m_centroid,m_normal);
-  m_p4  = glm::vec4(a.x,c.y,a.z,0);
+  m_dir       = glm::dot(-m_centroid,m_normal);
+
+  m_points[0] = a;
+  m_points[1] = b;
+  m_points[2] = c;
+  m_points[3] = glm::vec4(a.x,c.y,a.z,0);
 
   m_edges[0].set(a,b);
   m_edges[1].set(b,c);
 
   // pre-calc for indom
-  auto& d0=m_edges[0].p1();
-  auto& d1=m_edges[1].p2();
+  auto& d0=m_edges[0].point(0);
+  auto& d1=m_edges[1].point(1);
 
   // min && max of X
   m_dom[0][0]=(d0.x < d1.x) ? d0.x : d1.x;
@@ -126,7 +130,7 @@ Collision Plane::isect_ray(Line& ray) {
 
   };
 
-  float dot = glm::dot(m_normal, ray.p1());
+  float dot = glm::dot(m_normal, ray.point(0));
   float t   = -(dot + m_dir) / denom;
 
   // no hit

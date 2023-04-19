@@ -6,6 +6,7 @@
 
   #include <glm/glm.hpp>
   #include "bitter/kvrnel/Style.hpp"
+  #include "bitter/ff/CRK.hpp"
 
   #include "Collision.hpp"
   #include "Line.hpp"
@@ -17,7 +18,7 @@ namespace Gaol { class Plane {
 
 public:
 
-  VERSION   "v2.00.1";
+  VERSION   "v2.00.2";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -29,9 +30,10 @@ private:
 
   glm::vec3 m_centroid;
   glm::vec3 m_normal;
-  glm::vec3 m_p4;
 
-  Line      m_edges[2];
+  Points    m_points;
+  Lines     m_edges;
+
   float     m_dir;
 
 // ---   *   ---   *   ---
@@ -41,9 +43,9 @@ public:
 
   // cstruc
   void set(
-    glm::vec3 a,
-    glm::vec3 b,
-    glm::vec3 c
+    glm::vec3& a,
+    glm::vec3& b,
+    glm::vec3& c
 
   );
 
@@ -107,8 +109,15 @@ public:
 
   };
 
-  inline glm::vec3& p4(void) {
-    return m_p4;
+  inline glm::vec3& point(uint8_t idex) {
+    return m_points[idex];
+
+  };
+
+  // write plane to drawable
+  inline void to_mesh(CRK::Prim& me) {
+    CRK::Tri t(m_points,m_normal);
+    t.pack(me);
 
   };
 

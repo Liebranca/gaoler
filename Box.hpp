@@ -24,7 +24,7 @@ namespace Gaol { class Box {
 
 public:
 
-  VERSION   "v2.00.2";
+  VERSION   "v2.00.3";
   AUTHOR    "IBN-3DILA";
 
   // see first note on src
@@ -72,7 +72,7 @@ private:
   Planes    m_planes;
   Lines     m_cross;
 
-  glm::vec3 m_points[8];
+  Points    m_points;
   glm::vec3 m_origin={0,0,0};
 
   float     m_area[2];
@@ -187,6 +187,16 @@ public:
 
   inline float& lside(void) {
     return m_lside;
+
+  };
+
+  // write shape to drawable format
+  inline void to_mesh(CRK::Prim& me) {
+
+    for(auto& plane : m_planes) {
+      plane.to_mesh(me);
+
+    };
 
   };
 
