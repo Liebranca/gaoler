@@ -50,6 +50,8 @@ public:
     m_length    = glm::length(m_normal);
     m_normal    = glm::normalize(m_normal);
 
+    m_points.resize(2);
+
     m_points[0] = a;
     m_points[1] = b;
 

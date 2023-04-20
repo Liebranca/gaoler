@@ -27,7 +27,8 @@ namespace Gaol {
 void Plane::set(
   glm::vec3& a,
   glm::vec3& b,
-  glm::vec3& c
+  glm::vec3& c,
+  glm::vec3& d
 
 ) {
 
@@ -39,10 +40,14 @@ void Plane::set(
 
   m_dir       = glm::dot(-m_centroid,m_normal);
 
+  m_points.resize(4);
+
   m_points[0] = a;
   m_points[1] = b;
   m_points[2] = c;
-  m_points[3] = glm::vec4(a.x,c.y,a.z,0);
+  m_points[3] = d;
+
+  m_edges.resize(2);
 
   m_edges[0].set(a,b);
   m_edges[1].set(b,c);

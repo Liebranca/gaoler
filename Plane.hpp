@@ -18,7 +18,7 @@ namespace Gaol { class Plane {
 
 public:
 
-  VERSION   "v2.00.2";
+  VERSION   "v2.00.3";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -45,7 +45,8 @@ public:
   void set(
     glm::vec3& a,
     glm::vec3& b,
-    glm::vec3& c
+    glm::vec3& c,
+    glm::vec3& d
 
   );
 

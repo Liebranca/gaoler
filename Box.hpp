@@ -24,11 +24,18 @@ namespace Gaol { class Box {
 
 public:
 
-  VERSION   "v2.00.3";
+  VERSION   "v2.00.4";
   AUTHOR    "IBN-3DILA";
 
   // see first note on src
   cx8 WINDING[3*6]={
+
+//    0,4,7, // bottom
+//    2,1,5, // top
+//    0,4,5, // front
+//    2,6,7, // back
+//    5,6,7, // right
+//    1,2,3, // left
 
     0,4,7, // bottom
     2,1,5, // top
@@ -191,14 +198,7 @@ public:
   };
 
   // write shape to drawable format
-  inline void to_mesh(CRK::Prim& me) {
-
-    for(auto& plane : m_planes) {
-      plane.to_mesh(me);
-
-    };
-
-  };
+  void to_mesh(CRK::Prim& me);
 
 };};
 

@@ -64,16 +64,16 @@ void Box::set(
   m_points.resize(8);
 
   // nbl, ntl, ftl, fbl
-  m_points[0]={bot.x-x,bot.y+0,bot.z-z};
-  m_points[1]={bot.x-x,bot.y+y,bot.z-z};
-  m_points[2]={bot.x-x,bot.y+y,bot.z+z};
-  m_points[3]={bot.x-x,bot.y+0,bot.z+z};
+  m_points[0]={bot.x-x,bot.y+0,bot.z+z};
+  m_points[1]={bot.x-x,bot.y+y,bot.z+z};
+  m_points[2]={bot.x-x,bot.y+y,bot.z-z};
+  m_points[3]={bot.x-x,bot.y+0,bot.z-z};
 
   // nbr, ntr, ftr, fbr
-  m_points[4]={bot.x+x,bot.y+0,bot.z-z};
-  m_points[5]={bot.x+x,bot.y+y,bot.z-z};
-  m_points[6]={bot.x+x,bot.y+y,bot.z+z};
-  m_points[7]={bot.x+x,bot.y+0,bot.z+z};
+  m_points[4]={bot.x+x,bot.y+0,bot.z+z};
+  m_points[5]={bot.x+x,bot.y+y,bot.z+z};
+  m_points[6]={bot.x+x,bot.y+y,bot.z-z};
+  m_points[7]={bot.x+x,bot.y+0,bot.z-z};
 
   this->calc_planes();
 
@@ -135,13 +135,42 @@ void Box::calc_planes(void) {
 
   m_planes.resize(6);
 
+//  points are ordered so:
+//
+//    0: nbl | 4: nbr
+//    1: ntl | 5: ntr
+//    2: ftl | 6: ftr
+//    3: fbl | 7: fbr
+//
+//
+//  planes are arranged as such:
+//
+//    0: nbl,nbr,fbr | bottom
+//    1: ftl,ntl,ntr | top
+//    2: nbl,nbr,ntr | front
+//    3: ftl,ftr,fbr | back
+//    4: ntr,ftr,fbr | right
+//    5: ntl,ftl,fbl | right
+
+  cx8 winding[4*6]={
+
+    0,4,7,3, // bottom
+    2,1,5,6, // top
+    0,4,5,1, // front
+    2,6,7,3, // back
+    5,6,7,4, // right
+    1,2,3,0  // left
+
+  };
+
   // follow winding pattern decld in hed
-  for(uint8_t i=0,j=0;i<6;i++,j+=3) {
+  for(uint8_t i=0,j=0;i<6;i++,j+=4) {
 
     m_planes[i].set(
-      m_points[WINDING[j+0]],
-      m_points[WINDING[j+1]],
-      m_points[WINDING[j+2]]
+      m_points[winding[j+0]],
+      m_points[winding[j+1]],
+      m_points[winding[j+2]],
+      m_points[winding[j+3]]
 
     );
 
@@ -722,11 +751,13 @@ bool Box::isect_cage(Plane& plane) {
 };
 
 // ---   *   ---   *   ---
-// makes CRK
 
-void to_mesh(void) {
+void Box::to_mesh(CRK::Prim& me) {
 
-  ;
+  for(auto& plane : m_planes) {
+    plane.to_mesh(me);
+
+  };
 
 };
 
