@@ -16,7 +16,7 @@ namespace Gaol { class Frustum {
 
 public:
 
-  VERSION   "v2.00.2";
+  VERSION   "v2.00.4";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -64,7 +64,7 @@ public:
   );
 
   // frustum-box intersection
-  bool isect_box(Box& box);
+  bool isect_box(Box& b);
 
   // ^prism-prism
   // same call, so just sugar
@@ -105,6 +105,12 @@ public:
     };
 
     return true;
+
+  };
+
+  // getters
+  inline Box& box(void) {
+    return m_box;
 
   };
 

@@ -26,19 +26,18 @@ namespace Gaol {
 void Bound::set(
 
   glm::mat4& model,
+
   glm::vec3& pos,
   glm::vec3& dim
 
 ) {
 
-  // transform origin
-  glm::vec4 npos({pos.x,pos.y,pos.z,1});
-  glm::vec4 ndim({dim.x,dim.y,dim.z,1});
-  glm::vec3 wpos=glm::vec3(model * npos);
+  // transform dimentions
+  glm::vec4 ndim(dim.x,dim.y,dim.z,1);
   glm::vec3 wdim=glm::vec3(model * ndim);
 
-  // ^regenerate shapes from world coords
-  m_box.set(wpos,wdim.x,wdim.y,wdim.z);
+  // ^regenerate shape from deformed
+  m_box.set(pos,wdim.x,wdim.y,wdim.z);
   m_sphere.set(
     m_box.origin(),
     m_box.lside()+Limit::MARGIN

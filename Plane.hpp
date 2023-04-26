@@ -18,7 +18,7 @@ namespace Gaol { class Plane {
 
 public:
 
-  VERSION   "v2.00.3";
+  VERSION   "v2.00.4";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -82,7 +82,7 @@ public:
   bool indom_point(glm::vec3& p,int ax);
 
   // checks point in plane
-  inline float point_isect(glm::vec3 p) {
+  inline float isect_point(glm::vec3 p) {
     return glm::dot(m_normal,p)+m_dir;
 
   };

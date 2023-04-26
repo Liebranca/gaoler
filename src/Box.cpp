@@ -27,12 +27,12 @@
 //
 //  planes are arranged as such:
 //
-//    0: nbl,nbr,fbr | bottom
-//    1: ftl,ntl,ntr | top
-//    2: nbl,nbr,ntr | front
-//    3: ftl,ftr,fbr | back
-//    4: ntr,ftr,fbr | right
-//    5: ntl,ftl,fbl | right
+//    0: nbl,nbr,fbr,fbl | bottom
+//    1: ftl,ntl,ntr,ftr | top
+//    2: nbl,nbr,ntr,ntl | front
+//    3: ftl,ftr,fbr,fbl | back
+//    4: ntr,ftr,fbr,nbr | right
+//    5: ntl,ftl,fbl,nbl | left
 //
 //
 // remember the winding order
@@ -135,42 +135,14 @@ void Box::calc_planes(void) {
 
   m_planes.resize(6);
 
-//  points are ordered so:
-//
-//    0: nbl | 4: nbr
-//    1: ntl | 5: ntr
-//    2: ftl | 6: ftr
-//    3: fbl | 7: fbr
-//
-//
-//  planes are arranged as such:
-//
-//    0: nbl,nbr,fbr | bottom
-//    1: ftl,ntl,ntr | top
-//    2: nbl,nbr,ntr | front
-//    3: ftl,ftr,fbr | back
-//    4: ntr,ftr,fbr | right
-//    5: ntl,ftl,fbl | right
-
-  cx8 winding[4*6]={
-
-    0,4,7,3, // bottom
-    2,1,5,6, // top
-    0,4,5,1, // front
-    2,6,7,3, // back
-    5,6,7,4, // right
-    1,2,3,0  // left
-
-  };
-
   // follow winding pattern decld in hed
   for(uint8_t i=0,j=0;i<6;i++,j+=4) {
 
     m_planes[i].set(
-      m_points[winding[j+0]],
-      m_points[winding[j+1]],
-      m_points[winding[j+2]],
-      m_points[winding[j+3]]
+      m_points[WINDING[j+0]],
+      m_points[WINDING[j+1]],
+      m_points[WINDING[j+2]],
+      m_points[WINDING[j+3]]
 
     );
 
@@ -656,8 +628,7 @@ bool Box::isect_point(glm::vec3& p) {
 
   for(auto& plane : m_planes) {
 
-    float d=plane.point_isect(p);
-
+    float d=plane.isect_point(p);
     if(d > Limit::NORMAL) {
       return false;
 
@@ -717,20 +688,22 @@ bool Box::isect_cage(Plane& plane) {
 
   Lines cage {
 
+    m_cross[CBOTTOM_L],
+    m_cross[CBOTTOM_R],
+
+    m_cross[CTOP_L],
+    m_cross[CTOP_R],
+
     m_planes[FRONT].edge(1),
     m_planes[BACK].edge(1),
     m_planes[RIGHT].edge(1),
     m_planes[LEFT].edge(1),
 
-    m_planes[BOTTOM].edge(0),
-    m_planes[BOTTOM].edge(1),
-    m_cross[CBOTTOM_L],
-    m_cross[CBOTTOM_R],
-
     m_planes[TOP].edge(0),
     m_planes[TOP].edge(1),
-    m_cross[CTOP_L],
-    m_cross[CTOP_R]
+
+    m_planes[BOTTOM].edge(0),
+    m_planes[BOTTOM].edge(1)
 
   };
 

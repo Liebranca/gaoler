@@ -16,7 +16,7 @@ namespace Gaol { class Sphere {
 
 public:
 
-  VERSION   "v2.00.2";
+  VERSION   "v2.00.3";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -56,6 +56,14 @@ public:
   // sphere-cuboid intersection
   int isect_box(Box& box);
 
+  // sphere-sphere intersection
+  Collision isect_sphere(Sphere& other);
+
+  // getters
+  inline glm::vec3& origin(void) {
+    return m_origin;
+
+  };
 
 };};
 

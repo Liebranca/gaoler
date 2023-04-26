@@ -23,8 +23,8 @@ namespace Gaol {
 
 void Frustum::set(
 
-  float height,
   float width,
+  float height,
 
   float fov,
   float near,
@@ -34,11 +34,13 @@ void Frustum::set(
 
   m_znear = near;
   m_zfar  = far;
+  fov     = 2 * tan(fov*0.5f);
 
   float aspect=width/height;
 
-  m_hnear  = 2 * tan(fov / 2) * m_znear;
-  m_hfar   = 2 * tan(fov / 2) * m_zfar;
+
+  m_hnear  = fov * m_znear;
+  m_hfar   = fov * m_zfar;
   m_wnear  = m_hnear * aspect;
   m_wfar   = m_hfar  * aspect;
 
@@ -62,25 +64,25 @@ void Frustum::calc_box(
 
   // far offsets
   glm::vec3 fc     = pos + fwd * m_zfar;
-  glm::vec3 hfar   = haxis * (m_wfar/2);
+  glm::vec3 wfar   = haxis * (m_wfar/2);
   glm::vec3 upfar  = up    * (m_hfar/2);
 
   // far points
-  glm::vec3 ftl    = fc + upfar - hfar;
-  glm::vec3 ftr    = fc + upfar + hfar;
-  glm::vec3 fbl    = fc - upfar - hfar;
-  glm::vec3 fbr    = fc - upfar + hfar;
+  glm::vec3 ftl    = fc + upfar - wfar;
+  glm::vec3 ftr    = fc + upfar + wfar;
+  glm::vec3 fbl    = fc - upfar - wfar;
+  glm::vec3 fbr    = fc - upfar + wfar;
 
   // near offsets
   glm::vec3 nc     = pos + fwd * m_znear;
-  glm::vec3 hnear  = haxis * (m_wnear/2);
+  glm::vec3 wnear  = haxis * (m_wnear/2);
   glm::vec3 upnear = up    * (m_hnear/2);
 
   // near points
-  glm::vec3 ntl    = nc + upnear - hnear;
-  glm::vec3 ntr    = nc + upnear + hnear;
-  glm::vec3 nbl    = nc - upnear - hnear;
-  glm::vec3 nbr    = nc - upnear + hnear;
+  glm::vec3 ntl    = nc + upnear - wnear;
+  glm::vec3 ntr    = nc + upnear + wnear;
+  glm::vec3 nbl    = nc - upnear - wnear;
+  glm::vec3 nbr    = nc - upnear + wnear;
 
   // ^make prism from points
   m_box.set_prism(
@@ -94,11 +96,12 @@ void Frustum::calc_box(
 // ---   *   ---   *   ---
 // frustum-box intersection
 
-bool Frustum::isect_box(Box& box) {
+bool Frustum::isect_box(Box& b) {
 
   auto& planes=m_box.planes();
+
   for(auto& plane : planes) {
-    if(m_box.isect_cage(plane)) {
+    if(b.isect_cage(plane)) {
       return true;
 
     };
@@ -115,7 +118,9 @@ bool Frustum::isect_box(Box& box) {
 int Frustum::isect_bound(Bound& b) {
 
   int out=b.sphere().isect_box(m_box);
-  if(out<0) {
+
+  if(out < 0) {
+
     out=this->isect_box(b.box());
 
   };

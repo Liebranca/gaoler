@@ -17,7 +17,7 @@ namespace Gaol { class Bound {
 
 public:
 
-  VERSION   "v2.00.1";
+  VERSION   "v2.00.2";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -37,6 +37,7 @@ public:
   void set(
 
     glm::mat4& model,
+
     glm::vec3& pos,
     glm::vec3& dim
 

@@ -23,7 +23,7 @@ namespace Gaol {
 
 int Sphere::isect_plane(Plane& plane) {
 
-  // manual inline of point_isect
+  // manual "inline" of isect_point
   // done so we can reuse vec
   glm::vec3 vto=plane.centroid()-m_origin;
 
@@ -35,10 +35,10 @@ int Sphere::isect_plane(Plane& plane) {
 
   // ^else run the rougher check
   int   out = 0;
-  float d   = plane.point_isect(m_origin);
+  float d   = plane.isect_point(m_origin);
 
   // *possibly* outside
-  if(d<0) {
+  if(d < 0) {
 
     float x=glm::dot(vto,plane.normal());
     if(x < m_radius) {
@@ -74,7 +74,7 @@ int Sphere::isect_box(Box& box) {
   for(auto& plane : planes) {
 
     int test=this->isect_plane(plane);
-    if(test<0) {
+    if(test < 0) {
       return -1;
 
     };
@@ -84,6 +84,34 @@ int Sphere::isect_box(Box& box) {
   };
 
   return inside==6;
+
+};
+
+// ---   *   ---   *   ---
+// sphere-sphere intersection
+
+Collision Sphere::isect_sphere(Sphere& other) {
+
+  Collision out;
+
+  glm::vec3 vto = other.m_origin-m_origin;
+  float     d   = glm::length(vto);
+
+  if(
+
+     d < m_radius
+  || d < other.m_radius
+
+  ) {
+
+    glm::vec3 p=(other.m_origin+vto)*0.5f;
+    vto=glm::normalize(-vto);
+
+    out.set(vto,p);
+
+  };
+
+  return out;
 
 };
 

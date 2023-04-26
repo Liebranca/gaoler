@@ -24,25 +24,18 @@ namespace Gaol { class Box {
 
 public:
 
-  VERSION   "v2.00.4";
+  VERSION   "v2.00.5";
   AUTHOR    "IBN-3DILA";
 
   // see first note on src
-  cx8 WINDING[3*6]={
+  cx8 WINDING[4*6]={
 
-//    0,4,7, // bottom
-//    2,1,5, // top
-//    0,4,5, // front
-//    2,6,7, // back
-//    5,6,7, // right
-//    1,2,3, // left
-
-    0,4,7, // bottom
-    2,1,5, // top
-    0,4,5, // front
-    2,6,7, // back
-    5,6,7, // right
-    1,2,3, // left
+    0,4,7,3, // bottom
+    2,1,5,6, // top
+    0,4,5,1, // front
+    2,6,7,3, // back
+    5,6,7,4, // right
+    1,2,3,0  // left
 
   };
 

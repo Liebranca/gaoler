@@ -135,7 +135,7 @@ Collision Plane::isect_ray(Line& ray) {
 
   };
 
-  float dot = glm::dot(m_normal, ray.point(0));
+  float dot = glm::dot(m_normal,ray.point(0));
   float t   = -(dot + m_dir) / denom;
 
   // no hit
