@@ -587,9 +587,11 @@ Box::GCHK Box::isect_surface(
 // ---   *   ---   *   ---
 // *approximate* line-box intersection
 
-bool Box::isect_line(Line& ray) {
+Collision Box::isect_line(Line& ray) {
 
-  int   limit = int(ray.length());
+  Collision out;
+
+  int   limit = int(ray.length() * 2);
   float mid   = 0.5f;
 
   // cap attempts accto len of line
@@ -598,7 +600,11 @@ bool Box::isect_line(Line& ray) {
     // check mid point inside box
     glm::vec3 p=ray.point_along(mid);
     if(this->isect_point(p)) {
-      return true;
+
+      glm::vec3 n = -ray.normal();
+
+      out.set(n,p);
+      break;
 
     };
 
@@ -611,13 +617,13 @@ bool Box::isect_line(Line& ray) {
     // vto points towards normal
     // else go fowards
     mid += (d<0)
-      ? -mid/2
-      :  mid/2
+      ? -(mid/2)
+      :  (mid/2)
       ;
 
   };
 
-  return false;
+  return out;
 
 };
 

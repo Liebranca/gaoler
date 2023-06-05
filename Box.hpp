@@ -162,7 +162,7 @@ public:
   GCHK isect_surface(Box& other,float fac);
 
   // *approximate* line-box intersection
-  bool isect_line(Line& ray);
+  Collision isect_line(Line& ray);
 
   // point-box intersection
   bool isect_point(glm::vec3& p);
