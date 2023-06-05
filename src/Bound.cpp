@@ -25,16 +25,16 @@ namespace Gaol {
 
 void Bound::set(
 
-  glm::mat4& model,
+  mat4& model,
 
-  glm::vec3& pos,
-  glm::vec3& dim
+  vec3& pos,
+  vec3& dim
 
 ) {
 
   // transform dimentions
-  glm::vec4 ndim(dim.x,dim.y,dim.z,1);
-  glm::vec3 wdim=glm::vec3(model * ndim);
+  vec4 ndim(dim.x,dim.y,dim.z,1);
+  vec3 wdim=vec3(model * ndim);
 
   // ^regenerate shape from deformed
   m_box.set(pos,wdim.x,wdim.y,wdim.z);

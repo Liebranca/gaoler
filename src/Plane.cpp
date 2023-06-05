@@ -25,10 +25,10 @@ namespace Gaol {
 // cstruc
 
 void Plane::set(
-  glm::vec3& a,
-  glm::vec3& b,
-  glm::vec3& c,
-  glm::vec3& d
+  vec3& a,
+  vec3& b,
+  vec3& c,
+  vec3& d
 
 ) {
 
@@ -73,7 +73,7 @@ void Plane::set(
 // ---   *   ---   *   ---
 // point *possibly* intersects
 
-bool Plane::indom_point(glm::vec3& p,int ax) {
+bool Plane::indom_point(vec3& p,int ax) {
 
   float xm=m_dom[ax][0] - Limit::MARGIN;
   float xp=m_dom[ax][1] + Limit::MARGIN;
@@ -89,7 +89,7 @@ Collision Plane::isect_plane(Plane& other) {
 
   Collision out;
 
-  glm::vec3 inormal=glm::cross(
+  vec3 inormal=glm::cross(
     m_normal,other.m_normal
 
   );
@@ -97,10 +97,10 @@ Collision Plane::isect_plane(Plane& other) {
   float det=pow(glm::length(inormal),2);
 
   if(det > 0.001f) {
-    glm::vec3 a=glm::cross(inormal,other.m_normal);
-    glm::vec3 b=glm::cross(m_normal,inormal);
+    vec3 a=glm::cross(inormal,other.m_normal);
+    vec3 b=glm::cross(m_normal,inormal);
 
-    glm::vec3 ipoint=(
+    vec3 ipoint=(
       (a*m_dir)
     + (b*other.m_dir)
 
@@ -145,7 +145,7 @@ Collision Plane::isect_ray(Line& ray) {
   };
 
   // hit
-  glm::vec3 p=ray.isect(t);
+  vec3 p=ray.isect(t);
   out.set(ray.normal(),p);
 
   return out;

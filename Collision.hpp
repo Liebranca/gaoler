@@ -24,8 +24,8 @@ private:
 
   bool      m_hit    = false;
 
-  glm::vec3 m_normal = {0,0,0};
-  glm::vec3 m_point  = {0,0,0};
+  vec3 m_normal = {0,0,0};
+  vec3 m_point  = {0,0,0};
 
 // ---   *   ---   *   ---
 // iface
@@ -33,7 +33,7 @@ private:
 public:
 
   // cstruc
-  inline void set(glm::vec3& n,glm::vec3& p) {
+  inline void set(vec3& n,vec3& p) {
     m_hit    = true;
     m_normal = n;
     m_point  = p;
@@ -56,12 +56,12 @@ public:
 
   };
 
-  inline glm::vec3& normal(void) {
+  inline vec3& normal(void) {
     return m_normal;
 
   };
 
-  inline glm::vec3& point(void) {
+  inline vec3& point(void) {
     return m_point;
 
   };

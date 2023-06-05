@@ -73,7 +73,7 @@ private:
   Lines     m_cross;
 
   Points    m_points;
-  glm::vec3 m_origin={0,0,0};
+  vec3 m_origin={0,0,0};
 
   float     m_area[2];
   float     m_dim[3];
@@ -90,7 +90,7 @@ public:
   // cstruc
   void set(
 
-    glm::vec3 bot,
+    vec3 bot,
 
     float     x,
     float     y,
@@ -101,15 +101,15 @@ public:
   // ^alt
   void set_prism(
 
-    glm::vec3 nbl,
-    glm::vec3 ntl,
-    glm::vec3 ftl,
-    glm::vec3 fbl,
+    vec3 nbl,
+    vec3 ntl,
+    vec3 ftl,
+    vec3 fbl,
 
-    glm::vec3 nbr,
-    glm::vec3 ntr,
-    glm::vec3 ftr,
-    glm::vec3 fbr
+    vec3 nbr,
+    vec3 ntr,
+    vec3 ftr,
+    vec3 fbr
 
   );
 
@@ -124,15 +124,15 @@ public:
   ~Box(void) {};
 
   // give self+offset
-  Box project(glm::vec3& dir);
+  Box project(vec3& dir);
 
   // ^a more exotic variation
   // projects self, extending
   // planes that face away from view
   Box project_view(
-    glm::vec3& eye,
-    glm::vec3& pos,
-    glm::vec3& up,
+    vec3& eye,
+    vec3& pos,
+    vec3& up,
 
     float      v_zfar,
     float      v_hfar,
@@ -144,7 +144,7 @@ public:
   bool indom_box(Box& other);
 
   // give point-box is *possible*
-  bool indom_point(glm::vec3& p);
+  bool indom_point(vec3& p);
 
   // collision hit point inside box
   bool indom_col(Collision& col);
@@ -165,10 +165,10 @@ public:
   Collision isect_line(Line& ray);
 
   // point-box intersection
-  bool isect_point(glm::vec3& p);
+  bool isect_point(vec3& p);
 
   // box-box intersection
-  Collision isect_box(Box& other,glm::vec3& dir);
+  Collision isect_box(Box& other,vec3& dir);
 
   // these are naughty checks
   void nit_cage(Collisions& dst,Plane& plane);
@@ -180,7 +180,7 @@ public:
 
   };
 
-  inline glm::vec3& origin(void) {
+  inline vec3& origin(void) {
     return m_origin;
 
   };

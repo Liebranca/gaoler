@@ -4,9 +4,7 @@
 // ---   *   ---   *   ---
 // deps
 
-  #include <glm/glm.hpp>
-  #include "bitter/kvrnel/Style.hpp"
-
+  #include "bitter/kvrnel/GLM.hpp"
   #include "Bound.hpp"
 
 // ---   *   ---   *   ---
@@ -57,9 +55,9 @@ public:
 
   // recalculate bounds
   void calc_box(
-    glm::vec3& pos,
-    glm::vec3& fwd,
-    glm::vec3& up
+    vec3& pos,
+    vec3& fwd,
+    vec3& up
 
   );
 
@@ -88,7 +86,7 @@ public:
 
   };
 
-  inline bool isect_point(glm::vec3& p) {
+  inline bool isect_point(vec3& p) {
     return m_box.isect_point(p);
 
   };

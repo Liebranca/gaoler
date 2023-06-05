@@ -4,8 +4,7 @@
 // ---   *   ---   *   ---
 // deps
 
-  #include <glm/glm.hpp>
-  #include "bitter/kvrnel/Style.hpp"
+  #include "bitter/kvrnel/GLM.hpp"
   #include "bitter/ff/CRK.hpp"
 
   #include "Collision.hpp"
@@ -28,8 +27,8 @@ private:
 
   float     m_dom[3][2];
 
-  glm::vec3 m_centroid;
-  glm::vec3 m_normal;
+  vec3 m_centroid;
+  vec3 m_normal;
 
   Points    m_points;
   Lines     m_edges;
@@ -43,10 +42,10 @@ public:
 
   // cstruc
   void set(
-    glm::vec3& a,
-    glm::vec3& b,
-    glm::vec3& c,
-    glm::vec3& d
+    vec3& a,
+    vec3& b,
+    vec3& c,
+    vec3& d
 
   );
 
@@ -79,10 +78,10 @@ public:
   };
 
   // point *possibly* intersects
-  bool indom_point(glm::vec3& p,int ax);
+  bool indom_point(vec3& p,int ax);
 
   // checks point in plane
-  inline float isect_point(glm::vec3 p) {
+  inline float isect_point(vec3 p) {
     return glm::dot(m_normal,p)+m_dir;
 
   };
@@ -95,12 +94,12 @@ public:
   bool isect_edge(Plane& other);
 
   // getters
-  inline glm::vec3& normal(void) {
+  inline vec3& normal(void) {
     return m_normal;
 
   };
 
-  inline glm::vec3& centroid(void) {
+  inline vec3& centroid(void) {
     return m_centroid;
 
   };
@@ -110,7 +109,7 @@ public:
 
   };
 
-  inline glm::vec3& point(uint8_t idex) {
+  inline vec3& point(uint8_t idex) {
     return m_points[idex];
 
   };

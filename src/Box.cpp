@@ -53,7 +53,7 @@ namespace Gaol {
 
 void Box::set(
 
-  glm::vec3 bot,
+  vec3 bot,
 
   float     x,
   float     y,
@@ -101,15 +101,15 @@ void Box::set(
 
 void Box::set_prism(
 
-  glm::vec3 nbl,
-  glm::vec3 ntl,
-  glm::vec3 ftl,
-  glm::vec3 fbl,
+  vec3 nbl,
+  vec3 ntl,
+  vec3 ftl,
+  vec3 fbl,
 
-  glm::vec3 nbr,
-  glm::vec3 ntr,
-  glm::vec3 ftr,
-  glm::vec3 fbr
+  vec3 nbr,
+  vec3 ntr,
+  vec3 ftr,
+  vec3 fbr
 
 ) {
 
@@ -222,13 +222,13 @@ void Box::calc_area(void) {
 // ---   *   ---   *   ---
 // give self+offset
 
-Box Box::project(glm::vec3& dir) {
+Box Box::project(vec3& dir) {
 
   Box out;
 
   // cuboid projection
   if(! m_prism) {
-    glm::vec3 bot=m_planes[BOTTOM].centroid()+dir;
+    vec3 bot=m_planes[BOTTOM].centroid()+dir;
     out.set(bot,m_dim[0],m_dim[1],m_dim[2]);
 
   // trapezoid prism (aka frustum)
@@ -254,9 +254,9 @@ Box Box::project(glm::vec3& dir) {
 
 Box Box::project_view(
 
-  glm::vec3& eye,
-  glm::vec3& pos,
-  glm::vec3& up,
+  vec3& eye,
+  vec3& pos,
+  vec3& up,
 
   float      v_zfar,
   float      v_hfar,
@@ -267,26 +267,26 @@ Box Box::project_view(
   Box out;
 
   // get horizontal axis
-  glm::vec3 haxis=glm::normalize(
+  vec3 haxis=glm::normalize(
     glm::cross(up,eye)
 
   );
 
-  glm::vec3 ntl(
+  vec3 ntl(
     m_origin.x,
     m_planes[TOP].point(3).y,
     m_origin.z
 
   );
 
-  glm::vec3 ntr(
+  vec3 ntr(
     m_origin.x,
     m_planes[TOP].point(3).y,
     m_origin.z
 
   );
 
-  glm::vec3 castdirn  = {0,0,0};
+  vec3 castdirn  = {0,0,0};
   uint8_t   num_dirns = 0;
 
 // ---   *   ---   *   ---
@@ -296,7 +296,7 @@ Box Box::project_view(
   for(uint8_t i=2;i<6;i++) {
 
     auto&     plane = m_planes[i];
-    glm::vec3 vto   = pos-plane.centroid();
+    vec3 vto   = pos-plane.centroid();
 
     float     d     = glm::dot(vto,plane.normal());
 
@@ -306,7 +306,7 @@ Box Box::project_view(
       castdirn+=plane.normal();
       num_dirns++;
 
-      glm::vec3 points[4]={
+      vec3 points[4]={
 
         plane.edge(0).point(0),
         plane.edge(0).point(1),
@@ -320,21 +320,21 @@ Box Box::project_view(
       // near-plane correction
       for(auto& p : points) {
 
-        glm::vec3 ref={
+        vec3 ref={
           glm::dot(p,haxis),
           glm::dot(p,up),
           glm::dot(p,eye)
 
         };
 
-        glm::vec3 lolr={
+        vec3 lolr={
           glm::dot(ntr,haxis),
           glm::dot(ntr,up),
           glm::dot(ntr,eye)
 
         };
 
-        glm::vec3 loll={
+        vec3 loll={
           glm::dot(ntl,haxis),
           glm::dot(ntl,up),
           glm::dot(ntl,eye)
@@ -368,27 +368,27 @@ Box Box::project_view(
   };
 
   // ^get final direction
-  glm::vec3 dirn=normalize(
+  vec3 dirn=normalize(
     -castdirn + ((m_origin) - pos)
 
   );
 
   // ^get offsets
-  glm::vec3 fc    = dirn  * v_zfar;
-  glm::vec3 upfar = up    * (v_hfar/16);
-  glm::vec3 hfar  = haxis * (v_wfar/16);
+  vec3 fc    = dirn  * v_zfar;
+  vec3 upfar = up    * (v_hfar/16);
+  vec3 hfar  = haxis * (v_wfar/16);
 
 // ---   *   ---   *   ---
 // calc remaining points
 
-  glm::vec3 nbl(
+  vec3 nbl(
     ntl.x,
     m_planes[BOTTOM].point(3).y,
     ntl.z
 
   );
 
-  glm::vec3 nbr(
+  vec3 nbr(
     ntr.x,
     m_planes[BOTTOM].point(3).y,
     ntr.z
@@ -396,10 +396,10 @@ Box Box::project_view(
   );
 
   // project near plane towards direction
-  glm::vec3 ftl = ntl + fc + upfar - hfar;
-  glm::vec3 ftr = ntr + fc + upfar + hfar;
-  glm::vec3 fbl = nbl + fc - upfar - hfar;
-  glm::vec3 fbr = nbr + fc - upfar + hfar;
+  vec3 ftl = ntl + fc + upfar - hfar;
+  vec3 ftr = ntr + fc + upfar + hfar;
+  vec3 fbl = nbl + fc - upfar - hfar;
+  vec3 fbr = nbr + fc - upfar + hfar;
 
   // ^pass points to cstruc
   // this gives out a prism extending
@@ -429,7 +429,7 @@ bool Box::indom_box(Box& other) {
 // ---   *   ---   *   ---
 // give point-box is *possible*
 
-bool Box::indom_point(glm::vec3& p) {
+bool Box::indom_point(vec3& p) {
 
   auto&  a=m_planes[BOTTOM];
 
@@ -510,10 +510,10 @@ bool Box::isect_bottom(
   Line  r;
 
   auto& b=m_planes[BOTTOM];
-  glm::vec3 vel(0,fac,0);
+  vec3 vel(0,fac,0);
 
   // get all four corners
-  std::vector<glm::vec3> pattern {
+  std::vector<vec3> pattern {
 
     b.edge(0).point(0),
     b.edge(0).point(1),
@@ -526,7 +526,7 @@ bool Box::isect_bottom(
   // ^walk and shoot ray downwards
   for(auto& point : pattern) {
 
-    glm::vec3 end=point-vel;
+    vec3 end=point-vel;
     r.set(point,end);
 
     if(plane.isect_ray(r).hit()) {
@@ -598,10 +598,10 @@ Collision Box::isect_line(Line& ray) {
   for(int i=0;i<limit;i++) {
 
     // check mid point inside box
-    glm::vec3 p=ray.point_along(mid);
+    vec3 p=ray.point_along(mid);
     if(this->isect_point(p)) {
 
-      glm::vec3 n = -ray.normal();
+      vec3 n = -ray.normal();
 
       out.set(n,p);
       break;
@@ -610,7 +610,7 @@ Collision Box::isect_line(Line& ray) {
 
     // ^else find next middle point
     // relative to current position
-    glm::vec3 vto = m_origin-p;
+    vec3 vto = m_origin-p;
     float     d   = glm::dot(vto,ray.normal());
 
     // go backwards along line if
@@ -630,7 +630,7 @@ Collision Box::isect_line(Line& ray) {
 // ---   *   ---   *   ---
 // point-box intersection
 
-bool Box::isect_point(glm::vec3& p) {
+bool Box::isect_point(vec3& p) {
 
   for(auto& plane : m_planes) {
 
@@ -651,7 +651,7 @@ bool Box::isect_point(glm::vec3& p) {
 
 Collision Box::isect_box(
   Box&       other,
-  glm::vec3& dir
+  vec3& dir
 
 ) {
 
@@ -674,7 +674,7 @@ Collision Box::isect_box(
     ) {
 
       // TODO: get colpoint
-      glm::vec3 p={0,0,0};
+      vec3 p={0,0,0};
       out.set(plane.normal(),p);
 
       break;

@@ -4,8 +4,7 @@
 // ---   *   ---   *   ---
 // deps
 
-  #include <glm/glm.hpp>
-  #include "bitter/kvrnel/Style.hpp"
+  #include "bitter/kvrnel/GLM.hpp"
 
   #include "Sphere.hpp"
   #include "Box.hpp"
@@ -36,10 +35,10 @@ public:
   // cstruc
   void set(
 
-    glm::mat4& model,
+    mat4& model,
 
-    glm::vec3& pos,
-    glm::vec3& dim
+    vec3& pos,
+    vec3& dim
 
   );
 

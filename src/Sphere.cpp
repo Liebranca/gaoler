@@ -25,7 +25,7 @@ int Sphere::isect_plane(Plane& plane) {
 
   // manual "inline" of isect_point
   // done so we can reuse vec
-  glm::vec3 vto=plane.centroid()-m_origin;
+  vec3 vto=plane.centroid()-m_origin;
 
   // centroid inside sphere
   if(glm::length(vto) < m_radius) {
@@ -94,7 +94,7 @@ Collision Sphere::isect_sphere(Sphere& other) {
 
   Collision out;
 
-  glm::vec3 vto = other.m_origin-m_origin;
+  vec3 vto = other.m_origin-m_origin;
   float     d   = glm::length(vto);
 
   if(
@@ -104,7 +104,7 @@ Collision Sphere::isect_sphere(Sphere& other) {
 
   ) {
 
-    glm::vec3 p=(other.m_origin+vto)*0.5f;
+    vec3 p=(other.m_origin+vto)*0.5f;
     vto=glm::normalize(-vto);
 
     out.set(vto,p);

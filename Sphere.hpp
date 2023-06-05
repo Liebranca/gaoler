@@ -4,9 +4,7 @@
 // ---   *   ---   *   ---
 // deps
 
-  #include <glm/glm.hpp>
-  #include "bitter/kvrnel/Style.hpp"
-
+  #include "bitter/kvrnel/GLM.hpp"
   #include "Box.hpp"
 
 // ---   *   ---   *   ---
@@ -24,8 +22,8 @@ public:
 
 private:
 
-  glm::vec3 m_origin;
-  float     m_radius;
+  vec3  m_origin;
+  float m_radius;
 
 // ---   *   ---   *   ---
 // iface
@@ -33,7 +31,7 @@ private:
 public:
 
   // cstruc
-  inline void set(glm::vec3& o,float r) {
+  inline void set(vec3& o,float r) {
     m_origin=o;
     m_radius=r;
 
@@ -44,8 +42,8 @@ public:
   ~Sphere(void) {};
 
   // point inside sphere
-  inline bool isect_point(glm::vec3& p) {
-    glm::vec3 dist=m_origin-p;
+  inline bool isect_point(vec3& p) {
+    vec3 dist=m_origin-p;
     return glm::length(dist) < m_radius;
 
   };
@@ -60,7 +58,7 @@ public:
   Collision isect_sphere(Sphere& other);
 
   // getters
-  inline glm::vec3& origin(void) {
+  inline vec3& origin(void) {
     return m_origin;
 
   };

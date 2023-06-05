@@ -4,14 +4,13 @@
 // ---   *   ---   *   ---
 // deps
 
-  #include <glm/glm.hpp>
-  #include "bitter/kvrnel/Style.hpp"
+  #include "bitter/kvrnel/GLM.hpp"
 
 // ---   *   ---   *   ---
 // sugar
 
 namespace Gaol {
-  typedef std::vector<glm::vec3> Points;
+  typedef std::vector<vec3> Points;
 
 };
 
@@ -30,12 +29,12 @@ public:
 
 private:
 
-  Points    m_points;
+  Points m_points;
 
-  glm::vec3 m_normal;
-  glm::vec3 m_centroid;
+  vec3   m_normal;
+  vec3   m_centroid;
 
-  float     m_length;
+  float  m_length;
 
 // ---   *   ---   *   ---
 // iface
@@ -43,7 +42,7 @@ private:
 public:
 
   // cstruc
-  inline void set(glm::vec3& a,glm::vec3& b) {
+  inline void set(vec3& a,vec3& b) {
 
     m_normal    = b-a;
     m_centroid  = (a+b)*0.5f;
@@ -62,13 +61,13 @@ public:
   ~Line(void) {};
 
   // get aligned point
-  inline glm::vec3 point_along(float s) {
+  inline vec3 point_along(float s) {
     return m_points[0] + ((m_normal*m_length) * s);
 
   };
 
   // get intersection point
-  inline glm::vec3 isect(float t) {
+  inline vec3 isect(float t) {
     return m_points[0] + (t*m_normal);
 
   };
@@ -80,17 +79,17 @@ public:
   };
 
   // getters
-  inline glm::vec3& point(uint8_t idex) {
+  inline vec3& point(uint8_t idex) {
     return m_points[idex];
 
   };
 
-  inline glm::vec3& normal(void) {
+  inline vec3& normal(void) {
     return m_normal;
 
   };
 
-  inline glm::vec3& centroid(void) {
+  inline vec3& centroid(void) {
     return m_centroid;
 
   };
