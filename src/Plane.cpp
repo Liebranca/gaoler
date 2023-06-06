@@ -130,7 +130,7 @@ Collision Plane::isect_ray(Line& ray) {
   float denom=glm::dot(m_normal,ray.normal());
 
   // no hit
-  if(abs(denom) <= 1e-4f) {
+  if(fabs(denom) <= 1e-4f) {
     return out;
 
   };

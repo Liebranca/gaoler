@@ -24,7 +24,7 @@ namespace Gaol { class Box {
 
 public:
 
-  VERSION   "v2.00.5";
+  VERSION   "v2.00.6";
   AUTHOR    "IBN-3DILA";
 
   // see first note on src
@@ -69,18 +69,18 @@ public:
 
 private:
 
-  Planes    m_planes;
-  Lines     m_cross;
+  Planes m_planes;
+  Lines  m_cross;
 
-  Points    m_points;
-  vec3 m_origin={0,0,0};
+  Points m_points;
+  vec3   m_origin={0,0,0};
 
-  float     m_area[2];
-  float     m_dim[3];
+  float  m_area[2];
+  float  m_dim[3];
 
-  float     m_lside;
+  float  m_lside;
 
-  bool      m_prism=false;
+  bool   m_prism=false;
 
 // ---   *   ---   *   ---
 // iface
@@ -90,11 +90,11 @@ public:
   // cstruc
   void set(
 
-    vec3 bot,
+    vec3  bot,
 
-    float     x,
-    float     y,
-    float     z
+    float x,
+    float y,
+    float z
 
   );
 
@@ -134,9 +134,9 @@ public:
     vec3& pos,
     vec3& up,
 
-    float      v_zfar,
-    float      v_hfar,
-    float      v_wfar
+    float v_zfar,
+    float v_hfar,
+    float v_wfar
 
   );
 

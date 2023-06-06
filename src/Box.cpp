@@ -64,16 +64,16 @@ void Box::set(
   m_points.resize(8);
 
   // nbl, ntl, ftl, fbl
-  m_points[0]={bot.x-x,bot.y+0,bot.z+z};
+  m_points[0]={bot.x-x,bot.y-y,bot.z+z};
   m_points[1]={bot.x-x,bot.y+y,bot.z+z};
   m_points[2]={bot.x-x,bot.y+y,bot.z-z};
-  m_points[3]={bot.x-x,bot.y+0,bot.z-z};
+  m_points[3]={bot.x-x,bot.y-y,bot.z-z};
 
   // nbr, ntr, ftr, fbr
-  m_points[4]={bot.x+x,bot.y+0,bot.z+z};
+  m_points[4]={bot.x+x,bot.y-y,bot.z+z};
   m_points[5]={bot.x+x,bot.y+y,bot.z+z};
   m_points[6]={bot.x+x,bot.y+y,bot.z-z};
-  m_points[7]={bot.x+x,bot.y+0,bot.z-z};
+  m_points[7]={bot.x+x,bot.y-y,bot.z-z};
 
   this->calc_planes();
 
@@ -153,6 +153,7 @@ void Box::calc_planes(void) {
   m_planes[RIGHT].flip();
 
   // calc origin
+  m_origin={0,0,0};
   for(uint8_t i=0;i<8;i++) {
     m_origin+=m_points[i];
 
@@ -461,34 +462,22 @@ Collision Box::isect_ray(Line& ray) {
 
   Collision test,out;
 
-  // skip bottom and top planes
-  for(uint8_t i=2;i<6;i++) {
+  // attempt plane-line isect
+  // for each plane
+  for(uint8_t i=0;i<6;i++) {
 
     test=m_planes[i].isect_ray(ray);
 
-    // ray *apparently* hits
-    if(test.hit()) {
+    // ray hits *if* point inside
+    if(
+
+       test.hit()
+    && this->isect_point(test.point())
+
+    ) {
+
       out=test;
       break;
-
-    };
-
-  };
-
-  // ^double check
-  if(out.hit()) {
-
-    float dist=glm::distance(
-      out.point(),
-      ray.centroid()
-
-    );
-
-    float wall=ray.length() * 0.5f;
-
-    // false positive!
-    if(dist > wall) {
-      out.fake();
 
     };
 
