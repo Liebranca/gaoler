@@ -22,7 +22,7 @@ public:
 
 private:
 
-  bool      m_hit    = false;
+  bool m_hit    = false;
 
   vec3 m_normal = {0,0,0};
   vec3 m_point  = {0,0,0};

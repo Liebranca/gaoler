@@ -36,6 +36,13 @@ private:
   float     m_dir;
 
 // ---   *   ---   *   ---
+// guts
+
+  // pre-calc low-high cords on
+  // each axis for later checks
+  void calc_indom(void);
+
+// ---   *   ---   *   ---
 // iface
 
 public:
@@ -79,6 +86,8 @@ public:
 
   // point *possibly* intersects
   bool indom_point(vec3& p,int ax);
+  bool indom_point(vec2& p,int ax);
+  bool indom_point_xy(vec2& p);
 
   // checks point in plane
   inline float isect_point(vec3 p) {

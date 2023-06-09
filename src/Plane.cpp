@@ -32,7 +32,7 @@ void Plane::set(
 
 ) {
 
-  m_centroid  = (a+c)*0.5f;
+  m_centroid  = (a+b+c+d) * 0.25f;
   m_normal    = glm::normalize(
     glm::cross(b-a,c-a)
 
@@ -52,21 +52,31 @@ void Plane::set(
   m_edges[0].set(a,b);
   m_edges[1].set(b,c);
 
-  // pre-calc for indom
-  auto& d0=m_edges[0].point(0);
-  auto& d1=m_edges[1].point(1);
+  this->calc_indom();
 
-  // min && max of X
-  m_dom[0][0]=(d0.x < d1.x) ? d0.x : d1.x;
-  m_dom[0][1]=(d0.x > d1.x) ? d0.x : d1.x;
+};
 
-  // min && max of Y
-  m_dom[1][0]=(d0.y < d1.y) ? d0.y : d1.y;
-  m_dom[1][1]=(d0.y > d1.y) ? d0.y : d1.y;
+// ---   *   ---   *   ---
+// pre-calc low-high cords on
+// each axis for later checks
 
-  // min && max of Z
-  m_dom[2][0]=(d0.z < d1.z) ? d0.z : d1.z;
-  m_dom[2][1]=(d0.z > d1.z) ? d0.z : d1.z;
+void Plane::calc_indom(void) {
+
+  for(int ax=0;ax<3;ax++) {
+
+    float low  =  9999.0f;
+    float high = -9999.0f;
+
+    for(auto& p : m_points) {
+      low  = (p[ax] < low ) ? p[ax] : low;
+      high = (p[ax] > high) ? p[ax] : high;
+
+    };
+
+    m_dom[ax][0]=low;
+    m_dom[ax][1]=high;
+
+  };
 
 };
 
@@ -78,7 +88,34 @@ bool Plane::indom_point(vec3& p,int ax) {
   float xm=m_dom[ax][0] - Limit::MARGIN;
   float xp=m_dom[ax][1] + Limit::MARGIN;
 
-  return (xm <= p[ax] && p[ax] <= xp);
+  return
+     (p[ax] >= xm)
+  && (p[ax] <= xp)
+  ;
+
+};
+
+bool Plane::indom_point(vec2& p,int ax) {
+
+  float xm=m_dom[ax][0] - Limit::MARGIN;
+  float xp=m_dom[ax][1] + Limit::MARGIN;
+
+  return
+     (p[ax] >= xm)
+  && (p[ax] <= xp)
+  ;
+
+};
+
+// ---   *   ---   *   ---
+// ^shorthand
+
+bool Plane::indom_point_xy(vec2& p) {
+
+  return
+     this->indom_point(p,0)
+  && this->indom_point(p,1)
+  ;
 
 };
 
