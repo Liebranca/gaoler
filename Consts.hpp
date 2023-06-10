@@ -19,7 +19,7 @@ namespace Gaol::Mode {
 namespace Gaol::Limit {
 
   cxr32 NORMAL = 0.075f;
-  cxr32 MARGIN = 0.25f;
+  cxr32 MARGIN = 0.025f;
   cxr32 CLAMP  = 0.004f;
   cxr32 DEACC  = 0.95f;
 

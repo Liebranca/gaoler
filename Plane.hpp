@@ -17,7 +17,7 @@ namespace Gaol { class Plane {
 
 public:
 
-  VERSION   "v2.00.4";
+  VERSION   "v2.00.5";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -25,15 +25,15 @@ public:
 
 private:
 
-  float     m_dom[3][2];
+  float  m_dom[3][2];
 
-  vec3 m_centroid;
-  vec3 m_normal;
+  vec3   m_centroid;
+  vec3   m_normal;
 
-  Points    m_points;
-  Lines     m_edges;
+  Points m_points;
+  Lines  m_edges;
 
-  float     m_dir;
+  float  m_dir;
 
 // ---   *   ---   *   ---
 // guts
