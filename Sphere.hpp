@@ -14,7 +14,7 @@ namespace Gaol { class Sphere {
 
 public:
 
-  VERSION   "v2.00.3";
+  VERSION   "v2.00.4";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -43,10 +43,12 @@ public:
 
   // point inside sphere
   inline bool isect_point(vec3& p) {
-    vec3 dist=m_origin-p;
-    return glm::length(dist) < m_radius;
+    return glm::distance(m_origin,p) < m_radius;
 
   };
+
+  // sphere-line intersection
+  Collision isect_ray(Line& ray);
 
   // sphere-plane intersection
   int isect_plane(Plane& plane);

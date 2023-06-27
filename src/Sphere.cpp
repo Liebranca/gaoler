@@ -19,6 +19,28 @@
 namespace Gaol {
 
 // ---   *   ---   *   ---
+// sphere-line intersection
+
+Collision Sphere::isect_ray(Line& ray) {
+
+  Collision out;
+
+  vec3 p=ray.point_from_dist(
+    glm::distance(ray.point(0),m_origin)
+
+  );
+
+  if(this->isect_point(p)) {
+    vec3 n=glm::normalize(p-m_origin);
+    out.set(n,p);
+
+  };
+
+  return out;
+
+};
+
+// ---   *   ---   *   ---
 // sphere-plane intersection
 
 int Sphere::isect_plane(Plane& plane) {
@@ -94,8 +116,8 @@ Collision Sphere::isect_sphere(Sphere& other) {
 
   Collision out;
 
-  vec3 vto = other.m_origin-m_origin;
-  float     d   = glm::length(vto);
+  vec3  vto = other.m_origin-m_origin;
+  float d   = glm::length(vto);
 
   if(
 

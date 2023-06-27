@@ -21,7 +21,7 @@ namespace Gaol { class Line {
 
 public:
 
-  VERSION   "v2.00.2";
+  VERSION   "v2.00.3";
   AUTHOR    "IBN-3DILA";
 
 // ---   *   ---   *   ---
@@ -63,6 +63,17 @@ public:
   // get aligned point
   inline vec3 point_along(float s) {
     return m_points[0] + ((m_normal*m_length) * s);
+
+  };
+
+  // ^cast point accto distance to another
+  // give end of line if distance is OOB
+  inline vec3 point_from_dist(float s) {
+
+    return (s >= m_length)
+      ? m_points[1]
+      : this->point_along(s/m_length)
+      ;
 
   };
 
